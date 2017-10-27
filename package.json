@@ -1,0 +1,19 @@
+{
+  "name": "live2leaveassignment",
+  "version": "1.0.0",
+  "description": "assignment",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheTrope/Live2LeaveAssignment.git"
+  },
+  "author": "thetrope",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheTrope/Live2LeaveAssignment/issues"
+  },
+  "homepage": "https://github.com/TheTrope/Live2LeaveAssignment#readme"
+}
