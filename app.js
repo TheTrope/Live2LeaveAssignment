@@ -6,6 +6,18 @@ let app = express();
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
+var MongoClient = require('mongodb').MongoClient,
+  co = require('co'),
+  assert = require('assert');
+
+co(function*() {
+  var url = 'mongodb://localhost:27017/myproject';
+  var db = yield MongoClient.connect(url);
+  db.close();
+}).catch(function(err) {
+  console.log(err.stack);
+});
+
 
 function collect(arr_name, arr_err, jsonData){
     let dataCollector = {};

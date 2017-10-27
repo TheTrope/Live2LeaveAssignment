@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/TheTrope/Live2LeaveAssignment/issues"
   },
-  "homepage": "https://github.com/TheTrope/Live2LeaveAssignment#readme"
+  "homepage": "https://github.com/TheTrope/Live2LeaveAssignment#readme",
+  "dependencies": {
+    "mongodb": "^2.2.33"
+  }
 }
