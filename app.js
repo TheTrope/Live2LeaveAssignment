@@ -33,6 +33,7 @@ myProcess.init().then((val) => {
 
 
 function handleRequests(){
+
   console.log("Server ready");
   app.listen(4242);
 
@@ -40,6 +41,7 @@ function handleRequests(){
       let p = new Promise(myProcess.createBasket()).then((ret) =>{
         res.status(200).send(ret);
       }).catch((err) =>{
+        /* Err handler */
         console.log("Err")
       });
   });
@@ -53,8 +55,26 @@ function handleRequests(){
           let p = new Promise(myProcess.getBasket(dataCollector.basket_id)).then((ret) =>{
             res.status(200).send(ret);
           }).catch((err) =>{
+          /* Err handler */
             console.log("Err");
           });
+      } else {
+          /* Err handler */
+          res.status(500).send('Something broke!');
+      }
+  });
+
+  app.post('/api/add', (req, res) => {
+      let arr_name = ["basket_id", "items"];
+      let arr_err = [];
+      let dataCollector = collect(arr_name, arr_err, req.query);
+      if (!arr_err.length){
+        let p = new Promise(myProcess.addToBasket(dataCollector.basket_id, JSON.parse(dataCollector.items))).then((ret) =>{
+          res.status(200).send(ret);
+        }).catch((err) =>{
+          /* Err handler */
+          console.log("Err");
+        });
       } else {
           /* Err handler */
           res.status(500).send('Something broke!');
