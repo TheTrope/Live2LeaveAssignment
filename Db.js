@@ -16,7 +16,6 @@ class Db{
         ths.db = yield MongoClient.connect(url);
         ths.products = ths.db.collection('Product');
         ths.baskets = ths.db.collection('Basket');
-        ths.packs = ths.db.collection('Pack');
         resolve(ths);
       }).catch(function(err) {
         reject(err);

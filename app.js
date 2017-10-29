@@ -81,4 +81,37 @@ function handleRequests(){
       }
   });
 
+  app.post('/api/checkout', (req, res) => {
+      let arr_name = ["basket_id"];
+      let arr_err = [];
+      let dataCollector = collect(arr_name, arr_err, req.query);
+      if (!arr_err.length){
+        let p = new Promise(myProcess.checkoutBasket(dataCollector.basket_id)).then((ret) =>{
+          res.status(200).send(ret);
+        }).catch((err) =>{
+          /* Err handler */
+          console.log("Err");
+        });
+      } else {
+          /* Err handler */
+          res.status(500).send('Something broke!');
+      }
+  });
+  app.post('/api/add_replace_product', (req, res) => {
+      let arr_name = ["product"];
+      let arr_err = [];
+      let dataCollector = collect(arr_name, arr_err, req.query);
+      if (!arr_err.length){
+        let p = new Promise(myProcess.addOrReplaceProduct(JSON.parse(dataCollector.product))).then((ret) =>{
+          res.status(200).send(ret);
+        }).catch((err) =>{
+          /* Err handler */
+          console.log(err);
+        });
+      } else {
+          /* Err handler */
+          res.status(500).send('Something broke!');
+      }
+  });
+
 }
