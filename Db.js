@@ -1,7 +1,7 @@
 
 var MongoClient = require('mongodb').MongoClient,
-  co = require('co'),
-  assert = require('assert');
+    co = require('co'),
+    assert = require('assert');
 class Db{
 
   __constructor__(){

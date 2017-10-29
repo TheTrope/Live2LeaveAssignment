@@ -39,7 +39,6 @@ function addToBasket(basket_id, items){
         resolve(result);
       });
     }).then((basket) =>{
-      console.log(basket);
 
       // TODO : Secure check if item exists, quantity is int
       for (var it in items){
@@ -50,7 +49,7 @@ function addToBasket(basket_id, items){
       }
       db.baskets.updateOne({_id : new ObjectId(basket_id)}, {$set : {"items": basket.items}}, (err, result) =>{
         if (err)
-          rej(err);
+        rej(err);
         res(basket);
       });
 
@@ -65,10 +64,9 @@ function addToBasket(basket_id, items){
 
 function addOrReplaceProduct(product){
   return function(resolve, reject){
-    console.log(product);
     db.products.update({name : product.product.name}, product, {upsert: true}, function(err, val){
       if (err)
-        reject(err);
+      reject(err);
       resolve(val)
     });
   }
@@ -93,14 +91,12 @@ function checkoutBasket(basket_id){
     });
 
     Promise.all([basket_promise, product_promise]).then((values) =>{
-      console.log("val");
-      console.log(values);
       let basket = values[0];
       let products = values[1];
       let product_obj = {};
       let totalprice = 0;
       for (var p in products){
-          product_obj[p.name] = products[p][name];
+        product_obj[products[p].product.name] = products[p].product;
       }
       // TODO : Secure check if item exists, quantity is int
       for (var it in basket.items){
@@ -110,7 +106,6 @@ function checkoutBasket(basket_id){
           let nb = basket.items[it];
           let pricepromo = Math.floor(nb / pack.number) * (pack.for * price);
           pricepromo += (nb % pack.number) * price;
-
           totalprice += pricepromo;
         }
       }
@@ -135,4 +130,4 @@ module.exports = {
   checkoutBasket,
   addOrReplaceProduct,
   init
-  };
+};
