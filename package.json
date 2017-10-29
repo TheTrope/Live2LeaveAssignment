@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/TheTrope/Live2LeaveAssignment#readme",
   "dependencies": {
+    "co": "^4.6.0",
     "mongodb": "^2.2.33"
   }
 }

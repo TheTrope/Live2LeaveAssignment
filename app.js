@@ -3,22 +3,14 @@
 let express = require('express');
 let app = express();
 
+let myProcess = require("./process.js");
+
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-var MongoClient = require('mongodb').MongoClient,
-  co = require('co'),
-  assert = require('assert');
-
-co(function*() {
-  var url = 'mongodb://localhost:27017/myproject';
-  var db = yield MongoClient.connect(url);
-  db.close();
-}).catch(function(err) {
-  console.log(err.stack);
-});
 
 
+/* Collect arr_name data and check if all fields exists */
 function collect(arr_name, arr_err, jsonData){
     let dataCollector = {};
     arr_name.forEach(function (name) {
@@ -31,34 +23,42 @@ function collect(arr_name, arr_err, jsonData){
     return dataCollector;
 }
 
-
+myProcess.init().then((val) => {
+  handleRequests();
+}).catch((val)=>{
+  console.log("Err ->" + val);
+});
 /** END  INIT **/
 
 
 
+function handleRequests(){
+  console.log("Server ready");
+  app.listen(4242);
 
-app.post('/api/create', (req, res) => {
-    let arr_name = ["file"];
-    let arr_err = [];
-    let dataCollector = collect(arr_name, arr_err, req.body);
-    if (!arr_err.length){
-        console.log(dataCollector.file)
-    } else {
-        /* Err handler */
-        res.status(500).send('Something broke!');
-    }
-});
+  app.post('/api/create', (req, res) => {
+      let p = new Promise(myProcess.createBasket()).then((ret) =>{
+        res.status(200).send(ret);
+      }).catch((err) =>{
+        console.log("Err")
+      });
+  });
 
 
-app.post('/api/get', (req, res) => {
-    let arr_name = ["basket_id"];
-    let arr_err = [];
-    let dataCollector = collect(arr_name, arr_err, req.body);
-    if (!arr_err.length){
-        res.status(200).send();
-        id = dataCollector.id;
-    } else {
-        /* Err handler */
-        res.status(500).send('Something broke!');
-    }
-});
+  app.get('/api/get', (req, res) => {
+      let arr_name = ["basket_id"];
+      let arr_err = [];
+      let dataCollector = collect(arr_name, arr_err, req.query);
+      if (!arr_err.length){
+          let p = new Promise(myProcess.getBasket(dataCollector.basket_id)).then((ret) =>{
+            res.status(200).send(ret);
+          }).catch((err) =>{
+            console.log("Err");
+          });
+      } else {
+          /* Err handler */
+          res.status(500).send('Something broke!');
+      }
+  });
+
+}
